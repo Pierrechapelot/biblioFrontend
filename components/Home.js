@@ -8,6 +8,7 @@ function Home() {
   const [showBooks, setShowBooks] = useState(false); // Pour afficher/cacher la liste des livres
   const [searchQuery, setSearchQuery] = useState(""); // Pour gérer la recherche
   const [searchType, setSearchType] = useState("title");
+  const [books, setBooks] = useState([]);
 
   const handleShowForm = () => {
     setShowForm(true);
@@ -40,22 +41,35 @@ function Home() {
   };
 
   const fetchBooks = async () => {
-    const response = await fetch(
-      `http://localhost:3000/books/search?query=${searchQuery}`
-    );
-    const data = await response.json();
-    setBooks(data); // Mise à jour de l'état avec les livres récupérés
+    let url = `http://localhost:3000/books/search`;
+    if (searchQuery && searchType) {
+      url += `?${searchType}=${encodeURIComponent(searchQuery)}`;
+    } else {
+      url = `http://localhost:3000/books`;
+    }
+    console.log("Fetching books from URL:", url);
+
+    try {
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error("Failed to fetch books");
+      }
+      const data = await response.json();
+      setBooks(data);
+    } catch (error) {
+      console.error("Failed to fetch books:", error);
+    }
   };
 
   useEffect(() => {
     if (showBooks) {
       fetchBooks(); // Charger les livres quand showBooks est true et quand searchQuery change
     }
-  }, [showBooks, searchQuery]);
+  }, [showBooks, searchQuery, searchType]);
 
   const handleSearch = (e) => {
     e.preventDefault();
-    fetchBooks(); // Effectuer la recherche directement ici
+    setShowBooks(true);
   };
 
   return (
@@ -82,7 +96,7 @@ function Home() {
       </form>
 
       {showForm && <BookForm onSubmit={handleSubmitBook} />}
-      {showBooks && <BooksList searchQuery={searchQuery} />}
+      {showBooks && <BooksList searchType={searchType} searchQuery={searchQuery} books={books} />}
     </div>
   );
 }
