@@ -3,6 +3,8 @@ import BookForm from "../components/books/BookForm";
 import BooksList from "../components/books/BooksList";
 import AuthorsList from "../components/authors/AuthorsList";
 import AuthorForm from "../components/authors/AuthorForm";
+import LoansList from "../components/loans/LoansList"; 
+import LoanForm from "../components/loans/LoanForm";
 import styles from "../styles/Home.module.css";
 
 function Home() {
@@ -22,6 +24,10 @@ function Home() {
   const [authors, setAuthors] = useState([]);
   // const [selectedAuthorId, setSelectedAuthorId] = useState("");
 
+  //Etat pour les emprunts
+  const [loans, setLoans] = useState([]);
+  const [showLoanForm, setShowLoanForm] = useState(false);
+  const [searchParams, setSearchParams] = useState({ userIdentifier: "", book: "" });
 
   //Gestion des livres
   const handleShowForm = () => {
@@ -145,6 +151,65 @@ function Home() {
     }
   }, [showAuthors]);
 
+
+  //Gestion des emprunts
+
+
+  const fetchLoans = async (query = {}) => {
+    let queryString = Object.keys(query)
+      .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(query[key])}`)
+      .join("&");
+    try {
+      const response = await fetch(`http://localhost:3000/loans?${queryString}`);
+      if (!response.ok) {
+        throw new Error("Failed to fetch loans");
+      }
+      const data = await response.json();
+      setLoans(data);
+    } catch (error) {
+      console.error("Failed to fetch loans:", error);
+    }
+  };
+
+  const handleLoanFormSubmit = async (event) => {
+    // event.preventDefault(); // Empêcher le rechargement de la page
+  
+    // Construire l'objet loan à partir des valeurs des champs du formulaire
+    const loanData = {
+      book: event.target.book.value, // Assurez-vous que les champs ont des attributs `name` correspondants
+      userIdentifier: event.target.userIdentifier.value,
+      loanDate: event.target.loanDate.value,
+      dueDate: event.target.dueDate.value,
+      // Vous pourriez avoir besoin d'ajuster les noms des champs en fonction de votre formulaire
+    };
+  
+    // Envoyer les données à l'API
+    try {
+      const response = await fetch('http://localhost:3000/loans', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(loanData),
+      });
+  
+      if (!response.ok) {
+        throw new Error('Failed to save the loan');
+      }
+  
+      const savedLoan = await response.json();
+      console.log('Loan saved successfully:', savedLoan);
+      // Ici, vous pourriez vouloir rafraîchir la liste des emprunts pour afficher le nouvel emprunt
+      fetchLoans(); // Supposant que fetchLoans est votre fonction pour récupérer tous les emprunts
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchLoans();
+  }, []);
+
   return (
     <div className={styles.container}>
       <h1>Gestion de Bibliothèque</h1>
@@ -178,6 +243,14 @@ function Home() {
       
       {showAuthorForm && <AuthorForm onSave={handleSaveAuthor} />} 
       {showAuthors && <AuthorsList onFetchBooksByAuthor={fetchBooksByAuthor} authors={authors} />} 
+
+      <h2>Gestion des Emprunts</h2>
+      <button onClick={() => setShowLoanForm(!showLoanForm)}>
+        {showLoanForm ? "Annuler" : "Nouvel Emprunt"}
+      </button>
+      {showLoanForm && <LoanForm onFormSubmit={handleLoanFormSubmit} />}
+      <LoansList loans={loans} />
+      {/* Ajouter ici la logique pour la recherche des emprunts */}
     </div>
   );
 }
