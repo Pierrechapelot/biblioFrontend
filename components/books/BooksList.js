@@ -1,19 +1,29 @@
 import React, { useEffect, useState } from "react";
 
-function BooksList({ searchQuery }) {
+function BooksList({ searchType, searchQuery }) {
   const [books, setBooks] = useState([]);
 
   useEffect(() => {
-    // Ici, ajoutez la logique pour appeler votre API et récupérer les livres.
-    // La requête pourrait inclure la recherche par titre, auteur, ou genre si searchQuery n'est pas vide.
     const fetchBooks = async () => {
-      let url = `http://localhost:3000/books`;
+      // Construire l'URL pour pointer vers l'endpoint `/search` avec le paramètre de requête `query`
+      let url = `http://localhost:3000/books/search`;
       if (searchQuery) {
-        url += `?search=${encodeURIComponent(searchQuery)}`;
+        url += `?${searchType}=${encodeURIComponent(searchQuery)}`;
+      } else {
+        // Si aucun terme de recherche n'est spécifié, utiliser l'endpoint général pour obtenir tous les livres
+        url = `http://localhost:3000/books`;
       }
-      const res = await fetch(url);
-      const data = await res.json();
-      setBooks(data);
+      try {
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error('Failed to fetch books');
+        }
+        const data = await response.json();
+        setBooks(data);
+      } catch (error) {
+        console.error("Failed to fetch books:", error);
+        // Ici, vous pourriez définir un état pour gérer l'affichage d'erreurs dans l'UI
+      }
     };
 
     fetchBooks();
