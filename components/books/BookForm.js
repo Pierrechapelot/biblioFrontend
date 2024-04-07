@@ -8,7 +8,7 @@ function BookForm({ onSubmit }) {
     genre: "",
     isbn: "",
     publicationDate: "",
-    available: true, // Par défaut à true, ajustez selon votre logique
+    available: true, 
   });
 
   const handleChange = (e) => {
@@ -18,7 +18,7 @@ function BookForm({ onSubmit }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Ajustez ici selon la structure attendue par votre API
+
     onSubmit({
       ...book,
       author: { firstName: book.firstName, lastName: book.lastName },
@@ -88,63 +88,5 @@ function BookForm({ onSubmit }) {
     </form>
   );
 }
-
-// function BookForm({ bookData = {}, onSubmit }) {
-//   const [book, setBook] = useState(bookData);
-
-//   const handleChange = (e) => {
-//     const { name, value } = e.target;
-//     setBook((prevBook) => ({ ...prevBook, [name]: value }));
-//   };
-
-//   const handleSubmit = (e) => {
-//     e.preventDefault();
-//     onSubmit(book);
-//     setBook({}); // Réinitialiser le formulaire après soumission
-//   };
-
-//   return (
-//     <form onSubmit={handleSubmit}>
-//       <label htmlFor="title">Titre</label>
-//       <input
-//         name="title"
-//         id="title"
-//         value={book.title || ""}
-//         onChange={handleChange}
-//         required
-//       />
-
-//       {/* Supposons que vous avez un champ pour l'ID de l'auteur ou le nom; ajustez selon votre modèle. */}
-//       <label htmlFor="author">Auteur</label>
-//       <input
-//         name="author"
-//         id="author"
-//         value={book.author || ""}
-//         onChange={handleChange}
-//         required
-//       />
-
-//       <label htmlFor="genre">Genre</label>
-//       <input
-//         name="genre"
-//         id="genre"
-//         value={book.genre || ""}
-//         onChange={handleChange}
-//       />
-
-//       <label htmlFor="isbn">ISBN</label>
-//       <input
-//         name="isbn"
-//         id="isbn"
-//         value={book.isbn || ""}
-//         onChange={handleChange}
-//       />
-
-//       {/* Ajoutez d'autres champs nécessaires ici */}
-
-//       <button type="submit">Soumettre</button>
-//     </form>
-//   );
-// }
 
 export default BookForm;

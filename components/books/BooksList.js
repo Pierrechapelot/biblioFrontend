@@ -36,7 +36,7 @@ function BooksList({ searchType, searchQuery }) {
 {books.length > 0 ? (
     <ul>
       {books.map((book) => {
-        // console.log(book); // Pour voir la structure de chaque livre
+
         return (
           <li key={book._id}>
             {book.title} - {book.author?.firstName} {book.author?.lastName}
