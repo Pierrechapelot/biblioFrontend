@@ -5,7 +5,6 @@ function BooksList({ searchType, searchQuery, onDeleteBook }) {
 
   useEffect(() => {
     const fetchBooks = async () => {
-      // Construire l'URL pour pointer vers l'endpoint `/search` avec le paramètre de requête `query`
       let url = `http://localhost:3000/books/search`;
       if (searchQuery) {
         url += `?${searchType}=${encodeURIComponent(searchQuery)}`;
@@ -23,7 +22,6 @@ function BooksList({ searchType, searchQuery, onDeleteBook }) {
         setBooks(data);
       } catch (error) {
         console.error("Failed to fetch books:", error);
-        // Ici, vous pourriez définir un état pour gérer l'affichage d'erreurs dans l'UI
       }
     };
 
@@ -38,7 +36,9 @@ function BooksList({ searchType, searchQuery, onDeleteBook }) {
             return (
               <li key={book._id}>
                 {book.title} - {book.author?.firstName} {book.author?.lastName}
-                <button onClick={() => onDeleteBook(book._id)}>Supprimer</button>
+                <button onClick={() => onDeleteBook(book._id)}>
+                  Supprimer
+                </button>
               </li>
             );
           })}

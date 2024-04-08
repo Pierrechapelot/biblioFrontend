@@ -22,8 +22,8 @@ function AuthorsList({ onFetchBooksByAuthor }) {
       if (!response.ok) {
         throw new Error('Failed to delete the author');
       }
-      // Affiche une confirmation ou rafraîchit la liste des auteurs.
-      fetchAuthors(); // Rafraîchit la liste après suppression
+
+      fetchAuthors(); 
     })
     .catch((error) => console.error(error));
   };

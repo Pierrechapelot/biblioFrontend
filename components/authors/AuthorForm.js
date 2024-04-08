@@ -6,7 +6,7 @@ function AuthorForm({ author, onSave }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Logique pour sauvegarder l'auteur via l'API
+
     onSave({ firstName, lastName });
   };
 

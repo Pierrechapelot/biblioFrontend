@@ -19,7 +19,7 @@ function LoansList({ loans, onReturnLoan }) {
           <tbody>
             {loans.map((loan) => (
               <tr key={loan._id}>
-                <td>{loan.book ? loan.book.title : 'Livre inconnu'}</td>
+                <td>{loan.book ? loan.book.title : "Livre inconnu"}</td>
                 <td>{loan.userIdentifier}</td>
                 <td>{new Date(loan.loanDate).toLocaleDateString()}</td>
                 <td>{new Date(loan.dueDate).toLocaleDateString()}</td>

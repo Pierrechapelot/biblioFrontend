@@ -1,18 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
 function LoanForm({ onSubmit }) {
   const [loanData, setLoanData] = useState({
-    book: '',
-    userIdentifier: '',
-    loanDate: '',
-    dueDate: '',
-    returnDate: '',
-    status: 'loaned', // Vous pourriez vouloir définir cela dynamiquement basé sur le contexte d'utilisation du formulaire
+    book: "",
+    userIdentifier: "",
+    loanDate: "",
+    dueDate: "",
+    returnDate: "",
+    status: "loaned",
   });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setLoanData(prevState => ({
+    setLoanData((prevState) => ({
       ...prevState,
       [name]: value,
     }));
@@ -21,7 +21,6 @@ function LoanForm({ onSubmit }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     onSubmit(loanData);
-    // Réinitialiser le formulaire ou gérer la navigation comme nécessaire
   };
 
   return (
@@ -78,7 +77,12 @@ function LoanForm({ onSubmit }) {
       </div>
       <div>
         <label htmlFor="status">Statut:</label>
-        <select id="status" name="status" value={loanData.status} onChange={handleChange}>
+        <select
+          id="status"
+          name="status"
+          value={loanData.status}
+          onChange={handleChange}
+        >
           <option value="loaned">Emprunté</option>
           <option value="returned">Retourné</option>
         </select>

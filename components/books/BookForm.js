@@ -8,7 +8,7 @@ function BookForm({ onSubmit }) {
     genre: "",
     isbn: "",
     publicationDate: "",
-    available: true, 
+    available: true,
   });
 
   const handleChange = (e) => {
@@ -31,13 +31,11 @@ function BookForm({ onSubmit }) {
       isbn: "",
       publicationDate: "",
       available: true,
-    }); // Réinitialiser le formulaire après soumission
+    });
   };
 
   return (
     <form onSubmit={handleSubmit}>
-      {/* Champs du formulaire */}
-
       <label htmlFor="title">Titre</label>
       <input
         name="title"
@@ -74,10 +72,9 @@ function BookForm({ onSubmit }) {
       <label htmlFor="isbn">ISBN</label>
       <input name="isbn" id="isbn" value={book.isbn} onChange={handleChange} />
 
-
       <label htmlFor="publicationDate">Date de Publication</label>
       <input
-        type="date" // Type spécifique pour faciliter la saisie de la date
+        type="date" 
         name="publicationDate"
         id="publicationDate"
         value={book.publicationDate}

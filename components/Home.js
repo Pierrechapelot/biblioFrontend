@@ -9,9 +9,9 @@ import styles from "../styles/Home.module.css";
 
 function Home() {
   //Etats pour les livres
-  const [showForm, setShowForm] = useState(false); 
-  const [showBooks, setShowBooks] = useState(false); 
-  const [searchQuery, setSearchQuery] = useState(""); 
+  const [showForm, setShowForm] = useState(false);
+  const [showBooks, setShowBooks] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   const [searchType, setSearchType] = useState("title");
   const [books, setBooks] = useState([]);
 
@@ -20,12 +20,10 @@ function Home() {
   const [showAuthorForm, setShowAuthorForm] = useState(false);
   const [showAuthors, setShowAuthors] = useState(false);
   const [authors, setAuthors] = useState([]);
-  // const [selectedAuthorId, setSelectedAuthorId] = useState("");
 
   //Etat pour les emprunts
   const [loans, setLoans] = useState([]);
   const [showLoanForm, setShowLoanForm] = useState(false);
-  // const [filterStatus, setFilterStatus] = useState("");
 
   //Gestion des livres
   const handleShowForm = () => {
@@ -50,8 +48,8 @@ function Home() {
       .then((response) => response.json())
       .then((data) => {
         console.log("Success:", data);
-        setShowForm(false); 
-        setShowBooks(true); 
+        setShowForm(false);
+        setShowBooks(true);
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -84,11 +82,11 @@ function Home() {
       const response = await fetch(`http://localhost:3000/books/${bookId}`, {
         method: "DELETE",
       });
-  
+
       if (!response.ok) {
-        throw new Error('Failed to delete the book');
+        throw new Error("Failed to delete the book");
       }
-  
+
       fetchBooks();
     } catch (error) {
       console.error("Error deleting book:", error);
@@ -97,7 +95,7 @@ function Home() {
 
   useEffect(() => {
     if (showBooks) {
-      fetchBooks(); 
+      fetchBooks();
     }
   }, [showBooks, searchQuery, searchType]);
 
@@ -154,8 +152,8 @@ function Home() {
         throw new Error("Failed to fetch books for the author");
       }
       const books = await response.json();
-      setBooks(books); 
-      setShowBooks(true); 
+      setBooks(books);
+      setShowBooks(true);
     } catch (error) {
       console.error(error);
     }
@@ -167,12 +165,11 @@ function Home() {
     }
   }, [showAuthors]);
 
-
   //Gestion des emprunts
 
   const fetchLoans = async () => {
-    const url = "http://localhost:3000/loans"; 
-  
+    const url = "http://localhost:3000/loans";
+
     try {
       const response = await fetch(url);
       if (!response.ok) {
@@ -213,7 +210,6 @@ function Home() {
     }
   };
 
-
   const handleReturnLoan = async (loanId) => {
     try {
       const response = await fetch(`http://localhost:3000/loans/${loanId}`, {
@@ -221,14 +217,17 @@ function Home() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ status: "returned", returnDate: new Date().toISOString() }),
+        body: JSON.stringify({
+          status: "returned",
+          returnDate: new Date().toISOString(),
+        }),
       });
-  
+
       if (!response.ok) {
         throw new Error(`Failed to return loan, status: ${response.status}`);
       }
-  
-      fetchLoans(); 
+
+      fetchLoans();
     } catch (error) {
       console.error("Error returning loan:", error);
     }
