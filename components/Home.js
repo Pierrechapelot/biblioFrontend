@@ -239,7 +239,7 @@ function Home() {
 
   return (
     <div className={styles.container}>
-      <h1>Gestion de Bibliothèque</h1>
+      <h1>Biblioth</h1>
       <h2>Gestion des livres</h2>
       <button onClick={handleShowForm}>Ajouter un Livre</button>
       <button onClick={handleShowBooks}>Voir tous les Livres</button>
