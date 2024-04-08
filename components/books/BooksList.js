@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-function BooksList({ searchType, searchQuery }) {
+function BooksList({ searchType, searchQuery, onDeleteBook }) {
   const [books, setBooks] = useState([]);
 
   useEffect(() => {
@@ -15,9 +15,9 @@ function BooksList({ searchType, searchQuery }) {
       }
       try {
         const response = await fetch(url);
-        console.log(response)
+        console.log(response);
         if (!response.ok) {
-          throw new Error('Failed to fetch books');
+          throw new Error("Failed to fetch books");
         }
         const data = await response.json();
         setBooks(data);
@@ -30,29 +30,24 @@ function BooksList({ searchType, searchQuery }) {
     fetchBooks();
   }, [searchQuery, searchType]);
 
-
   return (
     <div>
-{books.length > 0 ? (
-    <ul>
-      {books.map((book) => {
-
-        return (
-          <li key={book._id}>
-            {book.title} - {book.author?.firstName} {book.author?.lastName}
-          </li>
-        );
-      })}
-    </ul>
-  ) : (
-    <p>Aucun livre trouvé.</p>
+      {books.length > 0 ? (
+        <ul>
+          {books.map((book) => {
+            return (
+              <li key={book._id}>
+                {book.title} - {book.author?.firstName} {book.author?.lastName}
+                <button onClick={() => onDeleteBook(book._id)}>Supprimer</button>
+              </li>
+            );
+          })}
+        </ul>
+      ) : (
+        <p>Aucun livre trouvé.</p>
       )}
     </div>
   );
 }
 
 export default BooksList;
-
-
-
-
