@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
-function BookForm({ onSubmit }) {
+function BookForm({ onSubmit, onSave, editingBook }) {
   const [book, setBook] = useState({
     title: "",
     firstName: "",
@@ -11,6 +11,20 @@ function BookForm({ onSubmit }) {
     available: true,
   });
 
+  useEffect(() => {
+    if (editingBook) {
+      setBook({
+        title: editingBook.title,
+        firstName: editingBook.author.firstName,
+        lastName: editingBook.author.lastName,
+        genre: editingBook.genre,
+        isbn: editingBook.isbn,
+        publicationDate: editingBook.publicationDate.substring(0, 10),
+        available: editingBook.available,
+      });
+    }
+  }, [editingBook]);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setBook((prevBook) => ({ ...prevBook, [name]: value }));
@@ -19,19 +33,28 @@ function BookForm({ onSubmit }) {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    onSubmit({
-      ...book,
-      author: { firstName: book.firstName, lastName: book.lastName },
-    });
-    setBook({
-      title: "",
-      firstName: "",
-      lastName: "",
-      genre: "",
-      isbn: "",
-      publicationDate: "",
-      available: true,
-    });
+    // Détermine si je suiss en mode d'édition
+    if (editingBook) {
+      // En mode d'édition, j'utilise onSave
+      onSave(book);
+    } else {
+      // En mode de création, j'utilise onSubmit
+      onSubmit({
+        ...book,
+        author: { firstName: book.firstName, lastName: book.lastName },
+      });
+
+      // Réinitialise  le formulaire après la soumission
+      setBook({
+        title: "",
+        firstName: "",
+        lastName: "",
+        genre: "",
+        isbn: "",
+        publicationDate: "",
+        available: true,
+      });
+    }
   };
 
   return (
@@ -74,7 +97,7 @@ function BookForm({ onSubmit }) {
 
       <label htmlFor="publicationDate">Date de Publication</label>
       <input
-        type="date" 
+        type="date"
         name="publicationDate"
         id="publicationDate"
         value={book.publicationDate}

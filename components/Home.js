@@ -14,6 +14,7 @@ function Home() {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchType, setSearchType] = useState("title");
   const [books, setBooks] = useState([]);
+  const [editingBook, setEditingBook] = useState(null);
 
   //Etats pour les auteurs
 
@@ -54,6 +55,35 @@ function Home() {
       .catch((error) => {
         console.error("Error:", error);
       });
+  };
+
+  const handleSaveBook = async (book) => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/books/${editingBook._id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(book),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to update the book");
+      }
+
+      setEditingBook(null);
+      fetchBooks();
+    } catch (error) {
+      console.error("Error updating book:", error);
+    }
+  };
+
+  const startEditing = (book) => {
+    setEditingBook(book);
+    setShowForm(true);
   };
 
   const fetchBooks = async () => {
@@ -260,13 +290,20 @@ function Home() {
         <button type="submit">Recherche</button>
       </form>
 
-      {showForm && <BookForm onSubmit={handleSubmitBook} />}
+      {showForm && (
+        <BookForm
+          onSubmit={handleSubmitBook}
+          onSave={handleSaveBook}
+          editingBook={editingBook}
+        />
+      )}
       {showBooks && (
         <BooksList
           searchType={searchType}
           searchQuery={searchQuery}
           books={books}
           onDeleteBook={handleDeleteBook}
+          onEditBook={startEditing}
         />
       )}
 

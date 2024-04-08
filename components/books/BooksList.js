@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-function BooksList({ searchType, searchQuery, onDeleteBook }) {
+function BooksList({ searchType, searchQuery, onDeleteBook, onEditBook }) {
   const [books, setBooks] = useState([]);
 
   useEffect(() => {
@@ -39,6 +39,7 @@ function BooksList({ searchType, searchQuery, onDeleteBook }) {
                 <button onClick={() => onDeleteBook(book._id)}>
                   Supprimer
                 </button>
+                <button onClick={() => onEditBook(book)}>Modifier</button>
               </li>
             );
           })}
